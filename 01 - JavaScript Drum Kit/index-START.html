@@ -59,7 +59,33 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+window.addEventListener("keydown", function (e) {
+  // Find elements pertaining to the key being pressed
+  const audioElement = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+  const keyElement = document.querySelector(`div[data-key="${e.keyCode}"]`);
 
+  // If the key doesn't have a note tied to it, do nothing
+  if(!audioElement) return;
+
+  // Rewind and play audio
+  audioElement.currentTime = 0;
+  audioElement.play();
+
+  keyElement.classList.add('playing');
+});
+
+// Find all key button elements
+const allKeyElements = document.querySelectorAll('.key');
+
+// Add a transition end listener to each key element
+allKeyElements.forEach(key => {
+  key.addEventListener('transitionend', function (e) {
+    // Prevent duplicate function calls
+    if(e.propertyName !== 'transform') {
+      this.classList.remove('playing');
+    };
+  });
+});
 </script>
 
 

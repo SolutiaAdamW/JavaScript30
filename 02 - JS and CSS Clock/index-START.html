@@ -63,12 +63,72 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform: rotate(90deg);
+      transform-origin: 100%;
+      transition: all 0.5s;
     }
+
+    .second-hand {
+      height: 3px;
+    }
+
+    .minute-hand {
+      height: 4px;
+    }
+
+    .hour-hand {
+      height: 5px;
+    }
+
 
   </style>
 
   <script>
+    // Find all clock hand elements
+    const secondHand = document.querySelector('.second-hand');
+    const minuteHand = document.querySelector('.min-hand');
+    const hourHand = document.querySelector('.hour-hand');
 
+    // Find current time and update hand position
+    function setDate() {
+      // Declare new date object
+      const now = new Date();
+
+      // Calculate and update rotations
+      const seconds = now.getSeconds();
+      const secondsDegrees = (360 * (seconds / 60)) + 90;
+      if(secondsDegrees % 360 == 90) { // Prevent loop around when returning to 12
+        secondHand.style.removeProperty("transition");
+        secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+        secondHand.style.transition = `all 0.05s`;
+      } else {
+        secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+      }
+
+      const minutes = now.getMinutes();
+      const minutesDegrees = (360 * (minutes / 60)) + 90;
+      if(minutesDegrees % 360 == 90) { // Prevent loop around when returning to 12
+        minuteHand.style.transition = `all 0s`;
+        minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
+        minuteHand.style.transition = `all 0.5s`;
+      } else {
+        minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
+      }
+
+
+      const hours = now.getHours();
+      const hoursDegrees = (360 * (hours / 12)) + 90;
+      if(hoursDegrees % 360 == 90) { // Prevent loop around when returning to 12
+        hourHand.style.transition = `all 0s`;
+        hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
+        hourHand.style.transition = `all 0.5s`;
+      } else {
+        hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
+      }
+
+    }
+
+    setInterval(setDate, 1000);
 
   </script>
 </body>
